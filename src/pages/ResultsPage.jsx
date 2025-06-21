@@ -10,13 +10,13 @@ const ResultsPage = () => {
   const [loading, setLoading] = useState(false);
   const instructorId = localStorage.getItem('userId');
 
-  useEffect(() => {
+useEffect(() => {
   const fetchData = async () => {
     await fetchAssessments();
     await fetchStudents();
   };
   fetchData();
-}, [instructorId]);
+}, [instructorId]); // instructorId is used inside fetchAssessments
 
 
   const fetchAssessments = async () => {
