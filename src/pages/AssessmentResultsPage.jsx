@@ -8,13 +8,14 @@ const AssessmentResultsPage = () => {
   const [results, setResults] = useState([]);
   const [title, setTitle] = useState('');
 
-  useEffect(() => {
+useEffect(() => {
   const fetchData = async () => {
     await fetchAssessmentTitle();
     await fetchResults();
   };
   fetchData();
 }, [id]);
+
 
   const fetchAssessmentTitle = async () => {
     try {
