@@ -9,27 +9,20 @@ const AssessmentResultsPage = () => {
   const [title, setTitle] = useState('');
 
   useEffect(() => {
-    fetchAssessmentTitle();
-    fetchResults();
-  }, [id]);
+    const fetchData = async () => {
+      try {
+        const resTitle = await api.get(`/Assessments/${id}`);
+        setTitle(resTitle.data.Title);
 
-  const fetchAssessmentTitle = async () => {
-    try {
-      const res = await api.get(`/Assessments/${id}`);
-      setTitle(res.data.Title);
-    } catch (err) {
-      console.error('Error fetching assessment title', err);
-    }
-  };
+        const resResults = await api.get(`/Results/Assessment/${id}`);
+        setResults(resResults.data);
+      } catch (err) {
+        console.error('Error fetching data', err);
+      }
+    };
 
-  const fetchResults = async () => {
-    try {
-      const res = await api.get(`/Results/Assessment/${id}`);
-      setResults(res.data);
-    } catch (err) {
-      console.error('Error fetching results', err);
-    }
-  };
+    fetchData();
+  }, [id]); // only 'id' in dependency array, no external function warning
 
   return (
     <motion.div
