@@ -118,8 +118,12 @@ const DashboardPage = () => {
         Welcome, {name || 'User'}!
       </motion.h1>
       <p className="text-center text-[var(--text-secondary)] mb-12">
-        You are logged in as <strong className="text-[var(--text-accent)]">{role || '...'}</strong>. Let's get started!
-      </p>
+  You are logged in as <strong className="text-[var(--text-accent)]">{role || '...'}</strong>. Let's get started!
+  {role === 'Instructor' && (
+    <><br />You have <strong>{counts.courses}</strong> courses and <strong>{counts.assessments}</strong> assessments.</>
+  )}
+</p>
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {(dashboardCards[role] || []).map((item, i) => (
