@@ -11,9 +11,13 @@ const ResultsPage = () => {
   const instructorId = localStorage.getItem('userId');
 
   useEffect(() => {
-    fetchAssessments();
-    fetchStudents();
-  }, []);
+  const fetchData = async () => {
+    await fetchAssessments();
+    await fetchStudents();
+  };
+  fetchData();
+}, [instructorId]);
+
 
   const fetchAssessments = async () => {
     try {
