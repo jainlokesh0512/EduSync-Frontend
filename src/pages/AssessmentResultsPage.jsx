@@ -9,9 +9,12 @@ const AssessmentResultsPage = () => {
   const [title, setTitle] = useState('');
 
   useEffect(() => {
-    fetchAssessmentTitle();
-    fetchResults();
-  }, [id]);
+  const fetchData = async () => {
+    await fetchAssessmentTitle();
+    await fetchResults();
+  };
+  fetchData();
+}, [id]);
 
   const fetchAssessmentTitle = async () => {
     try {
