@@ -11,39 +11,36 @@ const ResultsPage = () => {
   const instructorId = localStorage.getItem('userId');
 
   useEffect(() => {
-    fetchAssessments();
-    fetchStudents();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [coursesRes, assessmentsRes] = await Promise.all([
+          api.get('/Course'),
+          api.get('/Assessments'),
+        ]);
 
-  const fetchAssessments = async () => {
-    try {
-      const [coursesRes, assessmentsRes] = await Promise.all([
-        api.get('/Course'),
-        api.get('/Assessments'),
-      ]);
+        const instructorCourses = coursesRes.data
+          .filter((course) => course.instructorId === instructorId)
+          .map((course) => course.courseId);
 
-      const instructorCourses = coursesRes.data
-        .filter((course) => course.instructorId === instructorId)
-        .map((course) => course.courseId);
+        const instructorAssessments = assessmentsRes.data.filter((assessment) =>
+          instructorCourses.includes(assessment.courseId)
+        );
 
-      const instructorAssessments = assessmentsRes.data.filter((assessment) =>
-        instructorCourses.includes(assessment.courseId)
-      );
+        setAssessments(instructorAssessments);
+      } catch (err) {
+        console.error('Failed to load assessments or courses', err);
+      }
 
-      setAssessments(instructorAssessments);
-    } catch (err) {
-      console.error('Failed to load assessments or courses', err);
-    }
-  };
+      try {
+        const res = await api.get('/UserModels');
+        setStudents(res.data);
+      } catch (err) {
+        console.error('Failed to load students', err);
+      }
+    };
 
-  const fetchStudents = async () => {
-    try {
-      const res = await api.get('/UserModels');
-      setStudents(res.data);
-    } catch (err) {
-      console.error('Failed to load students', err);
-    }
-  };
+    fetchData();
+  }, [instructorId]); // now dependency is clear, no external function warning
 
   const fetchResults = async (assessmentId) => {
     try {
